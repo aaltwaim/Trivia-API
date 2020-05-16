@@ -25,8 +25,10 @@ def create_app(test_config=None):
   
   @app.after_request
   def after_request(response):
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization, true')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PATCH,POST,DELETE,OPTIONS')
+    response.headers.add('Access-Control-Allow-Headers', 
+    'Content-Type, Authorization, true')
+    response.headers.add('Access-Control-Allow-Methods', 
+    'GET,PATCH,POST,DELETE,OPTIONS')
     return response
      #done by AT
   
@@ -80,7 +82,8 @@ def create_app(test_config=None):
   @app.route('/questions', methods=['POST'])
   def add_question():
     body = request.get_json()
-    if not ('question' in body and 'answer' in body and 'difficulty' in body and 'category' in body):
+    if not ('question' in body and 'answer' in body and 'difficulty' in body 
+    and 'category' in body):
       abort(422)
 
     question = body.get('question')
@@ -89,13 +92,14 @@ def create_app(test_config=None):
     difficulty = body.get('difficulty')
 
     try:
-      new_question = Question(question=question,answer=answer,category=category,difficulty=difficulty)
+      new_question = Question(question=question,answer=answer,
+      category=category,difficulty=difficulty)
       new_question.insert()
       # selection = Question.query.order_by(Question.id).all()
       # current_questions = paginate_questions(request, selection)
       return jsonify({
         'success': True,
-        'created': question_id,
+        'created': question.id,
         # 'questions': current_questions,
         # 'total_questions': len(Question.query.all())
       })
@@ -109,7 +113,8 @@ def create_app(test_config=None):
     targted_question = body.get('searchTerm',None)
     if targted_question:
 
-      resulted_questions = Question.query.filter(Question.question.ilike(f'%{targted_question}%')).all()
+      resulted_questions = Question.query.filter(Question.question.
+      ilike(f'%{targted_question}%')).all()
       return jsonify({
         'success': True,
         'questions':[question.format() for question in resulted_questions],
@@ -123,7 +128,8 @@ def create_app(test_config=None):
   @app.route('/categories/<int:category_id>/questions')
   def retrieve_questions_based_on_category(category_id):
     try:
-      questions_by_category = Question.query.filter(Question.category == str(category_id)).all()
+      questions_by_category = Question.query.filter(
+        Question.category == str(category_id)).all()
       return jsonify({
         'success': True,
         'questions':[question.format() for question in questions_by_category],
@@ -143,11 +149,14 @@ def create_app(test_config=None):
       category = body.get('quiz_category')
       previous_questions = body.get('previous_questions')
       if category['type'] == 'click':
-        remaining_questions = Question.query.filter(Question.id.notin_(previous_questions)).all()
+        remaining_questions = Question.query.filter(
+          Question.id.notin_(previous_questions)).all()
       else:
-        remaining_questions = Question.query.filter_by(category=category['id']).filter(Question.id.notin_(previous_questions)).all()
+        remaining_questions = Question.query.filter_by(
+          category=category['id']).filter(Question.id.notin_(previous_questions)).all()
       
-      random_question = remaining_questions[random.randrange(0, len(remaining_questions))].format() if len(remaining_questions)> 0 else None
+      random_question = remaining_questions[random.randrange(0, 
+      len(remaining_questions))].format() if len(remaining_questions)> 0 else None
       return jsonify({
         'success': True,
         'question': random_question

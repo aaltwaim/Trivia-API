@@ -69,7 +69,7 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted'], str(question_id))
+        self.assertEqual(data['deleted'], question_id)
         self.assertEqual(question, None)
 
     def test_422_sent_deleting_non_existing_question(self):
