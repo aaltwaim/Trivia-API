@@ -68,13 +68,8 @@ One note before you delve into your tasks: for each endpoint you are expected to
 
 REVIEW_COMMENT
 ```
-This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
+## API Documentation
 
-Endpoints
-GET '/categories'
-GET ...
-POST ...
-DELETE ...
 
 GET '/categories'
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
@@ -89,6 +84,97 @@ GET '/categories'
 
 ```
 
+GET `\questions?page=<page_number>` 
+Fetches a paginated dictionary of questions of all available categories
+- *Request parameters (optional):* page:int 
+- *Example response:*  
+ ``` {
+  "categories": {
+    "1": "Science", 
+    "2": "Art", 
+    "3": "Geography", 
+    "4": "History", 
+    "5": "Entertainment", 
+    "6": "Sports"
+  }, 
+  "current_category": null, 
+  "questions": [
+    {
+      "answer": "Maya Angelou", 
+      "category": 4, 
+      "difficulty": 2, 
+      "id": 5, 
+      "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+    },  
+    {
+      "answer": "Escher", 
+      "category": 2, 
+      "difficulty": 1, 
+      "id": 16, 
+      "question": "Which Dutch graphic artist\u2013initials M C was a creator of optical illusions?"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 2
+}
+```
+
+DELETE `/questions/<question_id>`
+- Delete question from the questions list.
+- Request Arguments: Question Id
+- Returns: true if successfully deleted.
+Example Response `{"success":true}`
+
+POST `/questions`
+- Create a new question
+- Request Body: question, answer, difficulty and category.
+- Returns: true if successfully created.
+- Example Request Payload {"question":"test question","answer":"test answer","difficulty":"3","category":1}
+
+Example Response `{"success":true}`
+
+POST `/questions/search`
+Fetches all questions where a substring matches the search term (not case-sensitive)
+- *Request body:* {searchTerm:string}
+- *Example response:*
+```
+{
+  "current_category": null, 
+  "questions": [
+    {
+      "answer": "Lisbon", 
+      "category": 2, 
+      "difficulty": 1, 
+      "id": 29, 
+      "question": "What is the capital of Portugal?"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 1
+}
+```
+
+GET `/categories/<int:category_id>/questions`
+- To get questions based on category
+- Request Arguments: Category Id and Page Number.
+- Returns: List of questions, number of total questions, current category and categories.
+
+POST `/quizzes`
+Fetches one random question within a specified category. Previously asked questions are not asked again. 
+- *Request body:* {previous_questions: arr, quiz_category: {id:int, type:string}}
+- *Example response*: 
+```
+{
+  "question": {
+    "answer": "The Liver", 
+    "category": 1, 
+    "difficulty": 4, 
+    "id": 20, 
+    "question": "What is the heaviest organ in the human body?"
+  }, 
+  "success": true
+}
+```
 
 ## Testing
 To run the tests, run
